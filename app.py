@@ -17,7 +17,7 @@ def emailuploads():
     
     return True
 
-
+print(functions.has_url('hello https:welcome.com'))
 
 
 if __name__ == "__main__":
