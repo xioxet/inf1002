@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<p>hiiii! this is our email parser website</p>
+
+<linklist>
+	<a href='{{url_for('upload_email')}}'>&gt; try uploading an eml file!</a>
+	<a href='#'>&gt; back to home!</a>
+</linklist>
+{% endblock %}
