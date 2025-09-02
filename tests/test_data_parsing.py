@@ -1,11 +1,15 @@
 import pytest
 import pathlib
+import hashlib
 from data_parsing import read_eml
 
 
 def test_read_eml():
     filepath = pathlib.Path(__file__).parent / "testfiles" / "test_email.eml"
     eml_file = open(filepath, 'rb')
-    print(read_eml(eml_file))
+    parsed_eml = read_eml(eml_file)
 
-test_read_eml()
+    assert parsed_eml['plaintext_message'] == 'This is an HTML message. Please use an HTML capable mail program to read\nthis message.\n\nThis is just a plain text attachment file named attachment.txt .'
+
+    assert '1f209f1560df8cb6e983dff99d7a7d2db8dc3e439226abd38ef34facdffd82ec' == hashlib.sha256(parsed_eml['attachments'][0].read()).hexdigest()
+
