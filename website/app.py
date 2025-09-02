@@ -9,8 +9,7 @@ app = Flask(__name__)
 
 @app.route('/')
 def home():
-
-    return "hi"
+    return render_template("base.html")
 
 @app.route('/emailuploads')
 def emailuploads():
