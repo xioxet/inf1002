@@ -9,9 +9,14 @@ app = Flask(__name__)
 
 @app.route('/')
 def home():
+
     return "hi"
 
+@app.route('/emailuploads')
+def emailuploads():
+    
+    return True
 if __name__ == "__main__":
     app.run(debug=True)
 
-#testing-git commit 
+
