@@ -4,14 +4,16 @@ from wtforms import StringField, FileField
 from wtforms.validators import DataRequired
 import sqlite3, functions
 
+from data_parsing import read_eml
 
-app = Flask(__name__)
 
-@app.route('/')
+flask_app = Flask(__name__)
+
+@flask_app.route('/')
 def home():
     return render_template("base.html")
 
-@app.route('/emailuploads')
+@flask_app.route('/emailuploads')
 def emailuploads():
     
     return True
@@ -19,7 +21,5 @@ def emailuploads():
 print(functions.has_url('hello https:welcome.com'))
 
 
-if __name__ == "__main__":
-    app.run(debug=True)
 
 
