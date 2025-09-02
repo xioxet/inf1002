@@ -32,3 +32,4 @@ def read_eml(file: BinaryIO) -> dict:
     returned_msg['attachments'] = attachments
     
     return returned_msg
+
