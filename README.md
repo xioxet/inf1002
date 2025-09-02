@@ -16,7 +16,7 @@ real phishing app (real)
 - keep everything segmented into modules ( i have created the necessary folders for the modules that we will need, such as file-parsing, data validation + processing, and the actual phishing detection funcs
 - **quality of our phishing detection** is also important, gotta make sure our methodology is actually decent
 - we'll want a lot of parameters by which we classify spam vs not-spam, create as many different tests as possible
-
+- unit tests!!
 
 ## vague ideas for packages to use
 - whatever machine learning module you want also can just anyhow dogshit, preferably something lighter and easier to use
