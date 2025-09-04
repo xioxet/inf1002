@@ -7,6 +7,7 @@ import sqlite3, functions
 
 from data_parsing import read_eml
 from .forms import *
+import io
 
 
 flask_app = Flask(__name__)
@@ -21,6 +22,10 @@ def home():
 def upload_email():
     form = EmailUploadForm()
     if form.validate_on_submit():
-        return 'success!'
+        # the werkzeug file format is a bit annoying to work with, hence all the data juggling
+        eml_file = io.BytesIO(form.email_file.data.read())
+        
+        # actual email checking logic will go here evntually
+        return read_eml(eml_file)
     return render_template('upload_email.html', form=form)
     
