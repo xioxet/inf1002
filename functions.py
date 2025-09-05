@@ -2,7 +2,7 @@
 import re
 
 
-def has_url(text):
+def has_url(text): #url detection
     # Multiple patterns to catch different URL formats
     url_patterns = [
         r'https?://[^\s]+',  # Standard http/https URLs
