@@ -1,3 +1,8 @@
+
+# don't add the datasets to the git
+machine_learning/datasets
+machine_learning/wordlists
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[codz]

@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<i>i promise i will style this later!! file submission is just really annoying to style</i>
+<br><br>
+<form method="POST" enctype="multipart/form-data">
+	{{ form.hidden_tag() }}
+
+        <div>
+        {{ form.email_file.label }}<br>
+        {{ form.email_file() }}
+        </div>
+
+        <div>
+        	<button type="submit">process email!</button>
+        </div>
+</form>
+
+{% endblock %}
+
