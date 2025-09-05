@@ -1,4 +1,11 @@
 #All the functions 
+
+'''
+functions is a bit generic of a name ah
+i think for this has_url func you shld put it in data_parsing
+- cane
+'''
+
 import re
 
 

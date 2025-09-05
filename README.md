@@ -2,6 +2,13 @@
 
 real phishing app (real)
 
+## shit that is very important !!!
+when you run the program please make sure you are running it from the inf1002/ folder and not any subfolder, and you are using the following command:
+
+`python -m website`
+
+this is for Consistency With Imports. :) (pls i have gone thru enough poly projects where this was a problem believe me)
+
 ## to-do list:
 - website (flask)
 - email measurement criteria (six given features, plus some more extra? for sauce?)
