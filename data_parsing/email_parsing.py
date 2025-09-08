@@ -12,6 +12,7 @@ def read_eml(file: BinaryIO) -> dict:
     
     # handle multipart emails
     if msg.is_multipart():
+        
         plaintext_message = '\n'.join([msg_part.get_content() for msg_part in msg.walk() if msg_part.get_content_type() == "text/plain"])
     else:
         plaintext_message = msg.get_content()
