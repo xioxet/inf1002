@@ -12,13 +12,16 @@ def read_eml(file: BinaryIO) -> dict:
     
     # handle multipart emails
     if msg.is_multipart():
-        
         plaintext_message = '\n'.join([msg_part.get_content() for msg_part in msg.walk() if msg_part.get_content_type() == "text/plain"])
+        html_message = '\n'.join([msg_part.get_content() for msg_part in msg.walk() if msg_part.get_content_type() == "text/html"])
+        
     else:
-        plaintext_message = msg.get_content()
-   
-    returned_msg['plaintext_message'] = plaintext_message
+        
+        plaintext_message = msg.get_content() if msg.get_content_type() == "text/plain" else ""
+        html_message = msg.get_content() if msg.get_content_type() == "text/html" else ""
 
+    returned_msg['plaintext_message'] = plaintext_message
+    returned_msg['html_message'] = html_message
     # isolate attachment
     # i think parsing msg.walk twice is kind of inefficient :s
     # oopsie
@@ -34,16 +37,29 @@ def read_eml(file: BinaryIO) -> dict:
     
     return returned_msg
 
-def has_url(text): #url detection
+
+
+def url_detection(text): #url detection
     # Multiple patterns to catch different URL formats
     url_patterns = [
-        r'https?://[^\s]+',  # Standard http/https URLs
-        r'https?:[^\s]+',    # Malformed URLs like https:example.com
-        r'\b[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}(?:/[^\s]*)?',  # Domain names like example.com
-        r'www\.[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}(?:/[^\s]*)?'  # www.example.com
+        # 1) Schemed URLs (http/https/ftp) incl. auth, IPv4/IPv6, localhost, port, path
+        r'(?:https?|ftp)://(?:[^\s:@/]+(?::[^\s:@/]*)?@)?(?:(?:[a-z0-9-]+\.)+(?:[a-z]{2,63}|xn--[a-z0-9-]+)|localhost|\d{1,3}(?:\.\d{1,3}){3}|\[(?:[0-9a-f:.]+)\])(?::\d{2,5})?(?:/[^\s<>()\[\]{}"\']*)?',
+        # 2) www.* without scheme
+        r'www\.(?:[a-z0-9-]+\.)+(?:[a-z]{2,63}|xn--[a-z0-9-]+)(?::\d{2,5})?(?:/[^\s<>()\[\]{}"\']*)?',
+        # 3) bare domain (no scheme/www), optional port+path; avoid emails & scheme/www overlaps
+        r'(?<!@)(?<!://)(?<!www\.)(?:[a-z0-9-]+\.)+(?:[a-z]{2,63}|xn--[a-z0-9-]+)(?::\d{2,5})?(?:/[^\s<>()\[\]{}"\']*)?',
+        # 4) scheme without // (e.g., https:example.com)
+        r'(?:https?|ftp):(?!//)[^\s<>()\[\]{}"\']+'
     ]
-    
+
     for pattern in url_patterns:
-        if re.search(pattern, text):
-            return print('Have URL')
-    return print('No URL')
+        if re.findall(pattern, text):
+            url_link = re.findall(pattern,text)
+            print(url_link)
+            #all urls will be stored in list.
+            return url_link
+    print('No Url Detected')
+    return False
+
+#def url_analyzer(url):
+    #Identify links that do not match the claimed domain or contain IP addresses instead of domains.
