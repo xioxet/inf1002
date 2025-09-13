@@ -1,7 +1,7 @@
 
 # don't add the datasets to the git
 machine_learning/datasets
-machine_learning/wordlists
+machine_learning/pickled-datasets
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
