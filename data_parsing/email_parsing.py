@@ -6,7 +6,6 @@ from typing import Tuple, BinaryIO
 import io, re
 
 
-
 ''' this is the class that will be fed into the rule based function. all emails, whether or not it's from the .csv or from manual uploading of an .eml file, will be normalised into this class'''
 class ProcessedEmail:
     def __init__(self, sender: str, message: str, attachments: list, is_phishing: bool):
@@ -17,7 +16,7 @@ class ProcessedEmail:
 
 
     '''debugging method, flask gets angry at me because it can't serialise a Python class into json.'''
-    def __dict__(self):
+    def __dict__(self) -> dict:
         return {
             'sender': self.sender,
             'message': self.message,
