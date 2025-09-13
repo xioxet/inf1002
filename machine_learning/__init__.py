@@ -1,1 +1,1 @@
-from .wordlist_generation import *#meow
+from .main import *
