@@ -13,6 +13,12 @@ class Report:
                 }
         ]
 
+    def classify(self):
+        for criterium in self.criteria:
+            self.scores[criterium['name']] = criterium['function'](self.email)
+        return self.scores
+
+
 
 
 

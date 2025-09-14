@@ -31,7 +31,6 @@ def initialize_datasets() -> dict:
             with open(filepath, 'rb') as file:
                 compiled_datasets[data_dict['filename']] = pkl.load(file)
         else:
-            # okay this is a LITTLE BAROQUE but it does what i want it to LOL
             dataset = data_dict['function'](*data_dict['args'])
             with open(filepath, 'wb') as file: 
                     pkl.dump(dataset, file)
