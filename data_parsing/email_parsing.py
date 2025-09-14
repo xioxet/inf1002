@@ -26,7 +26,7 @@ class ProcessedEmail:
 
 
 ''' accepts an .eml file and returns data+metadata.'''
-def read_eml(file: BinaryIO) -> dict:
+def read_eml(file: BinaryIO) -> ProcessedEmail:
     msg = BytesParser(policy=policy.default).parse(file)
  
     msg_parts = []
@@ -57,7 +57,7 @@ def read_eml(file: BinaryIO) -> dict:
             msg_body,
             attachments,
             None
-    ).__dict__()
+    )
 
 
 
