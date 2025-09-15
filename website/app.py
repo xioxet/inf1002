@@ -6,6 +6,7 @@ from os import urandom
 import sqlite3
 
 from data_parsing import read_eml, email_parsing
+from rule_based_criteria import Report
 from .forms import *
 import io
 
@@ -24,8 +25,7 @@ def upload_email():
     if form.validate_on_submit():
         # the werkzeug file format is a bit annoying to work with, hence all the data juggling
         eml_file = io.BytesIO(form.email_file.data.read())
-        
-        # actual email checking logic will go here evntually
-        return read_eml(eml_file)
+        processed_eml = read_eml(eml_file)
+        return Report(processed_eml).classify()
     return render_template('upload_email.html', form=form)
     

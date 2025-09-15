@@ -7,13 +7,7 @@ from sklearn.model_selection import train_test_split
 import numpy as np
 import pickle as pkl
 
-'''helper func to serialize extracted wordlists to disk w/ pickle'''
-def pkl_serialize(data: dict, filename: str):
-    with open(pathlib.Path(__file__).parent / 'wordlists' / filename, 'rb') as f:
-        pkl.dump(data, f)
 
-''' uses numerical regrssion to evaluate weightage of certain keywords as classifiers for phishing/nonphishing'''
-''' todo: implement naive bayesian by hand? seems more interesting...'''
 def get_keywords(pathname: str) -> dict:
     dataset = pd.read_csv(pathlib.Path(__file__).parent / 'datasets' / pathname)
     x, y = dataset['body'], dataset['label']
