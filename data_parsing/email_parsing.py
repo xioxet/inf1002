@@ -14,6 +14,7 @@ class ProcessedEmail:
         self.is_phishing = None
 
 
+
     '''debugging method, flask gets angry at me because it can't serialise a Python class into json.'''
     def __dict__(self) -> dict:
         return {
@@ -60,7 +61,7 @@ def read_eml(file: BinaryIO) -> ProcessedEmail:
 
 
     for msg_part in msg_parts:
-        print(msg_part.get_content_disposition)
+        #print(msg_part.get_content_disposition)
         if 'text' in msg_part.get_content_type():
             msg_body += msg_part.get_content()   
 
@@ -70,7 +71,7 @@ def read_eml(file: BinaryIO) -> ProcessedEmail:
             file_obj = io.BytesIO(filedata)
             file_obj.name = msg_part.get_filename()
             attachments.append(file_obj)
-    
+            
     
     return ProcessedEmail(
             msg['from'],
@@ -78,6 +79,5 @@ def read_eml(file: BinaryIO) -> ProcessedEmail:
             attachments,
             None
     )
-
 
 

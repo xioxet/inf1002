@@ -3,7 +3,12 @@ from nltk.tokenize import word_tokenize
 from data_parsing import ProcessedEmail
 from bs4 import BeautifulSoup
 from urllib.parse import urlparse
-import re, ipaddress
+import re, ipaddress, virustotal_python, os
+from pprint import pprint
+from hashlib import sha256
+
+#VirusTotal API Key
+virusTotal_API_key = "7d7b6d2eb25c613fecc1b3a5bb5ccd1cdfeecc6312f390a6237c3f66036a4de3"
 
 def keyword_analysis(email: ProcessedEmail) -> int:
     keywords = COMPILED_DATASETS['keywords']
@@ -13,7 +18,7 @@ def keyword_analysis(email: ProcessedEmail) -> int:
         if word in keywords:
             total_score += keywords[word]
     return total_score
-    
+
 ## Url Rule based
 
 def url_detection(text): #url detection
@@ -73,3 +78,26 @@ def urL_ip_checker(text):
             print ('Suspicial url, the hostname are ipaddress.')
     except ValueError:
         print('No IP address in the hostname, seems okay!')
+
+
+def virusTotal(email: ProcessedEmail):
+    #file_path = "./Attachments/attachment.pdf"
+    #files = {"file": (os.path.basename(file_path), open(os.path.abspath(file_path), "rb"))}
+    dict = {}
+    for attachment in email.attachments:
+        file_bytes  = attachment.getvalue()
+        file_name = getattr(attachment, "name", "myfile.bin")
+        file_hash = sha256(file_bytes).hexdigest()
+        files = {"file": (file_name, file_bytes)}
+        print(file_name)
+        with virustotal_python.Virustotal(virusTotal_API_key) as vtotal:
+            #will upload into the virustotal, if the file have never been uploaded before
+            vtotal.request("files", files=files, method="POST")
+            #if the file been uploaded before, will instant get the report, else will be error
+            resp = vtotal.request(f"files/{file_hash}").data 
+            attribute_totalvotes = resp["attributes"]["total_votes"]
+            #more info about the attributes: https://docs.virustotal.com/reference/private-files-api#:~:text=You%20can%20find%20information%20about%20the%20file%27s%20attributes%20in%20here.%20In%20this%20case%20the%20SHA256%20of%20the%20file%20is%206b4bb405d3deea7a63e3ed02dd62a59c69b9458c15a901f3607429325b228ae8%3A 
+            dict[file_name] = attribute_totalvotes
+    return dict
+        
+
