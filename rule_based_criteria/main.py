@@ -11,6 +11,10 @@ class Report:
                 'name': 'keyword-analysis',
                 'function': criteria_functions.keyword_analysis,
                 }
+            ,{
+                'name': 'virusTotal',
+                'function': criteria_functions.virusTotal, 
+            }
         ]
 
     def classify(self):
