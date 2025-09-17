@@ -28,29 +28,9 @@ class ProcessedEmail:
 ''' accepts an .eml file and returns data+metadata.'''
 def read_eml(file: BinaryIO) -> ProcessedEmail:
     msg = BytesParser(policy=policy.default).parse(file)
-
-    returned_msg = dict()
-    
-    # handle multipart emails
-    if msg.is_multipart():
-        plaintext_message = '\n'.join([msg_part.get_content() for msg_part in msg.walk() if msg_part.get_content_type() == "text/plain"])
-        html_message = '\n'.join([msg_part.get_content() for msg_part in msg.walk() if msg_part.get_content_type() == "text/html"])
-        
-    else:
-        
-        plaintext_message = msg.get_content() if msg.get_content_type() == "text/plain" else ""
-        html_message = msg.get_content() if msg.get_content_type() == "text/html" else ""
-
-    returned_msg['plaintext_message'] = plaintext_message
-    returned_msg['html_message'] = html_message
-    # isolate attachment
-    # i think parsing msg.walk twice is kind of inefficient :s
-    # oopsie
-
-
+ 
     msg_parts = []
     msg_body = ''
-
     attachments = []
     
     if msg.is_multipart():
@@ -59,9 +39,8 @@ def read_eml(file: BinaryIO) -> ProcessedEmail:
     else:
         msg_parts.append(msg)
 
-
     for msg_part in msg_parts:
-        #print(msg_part.get_content_disposition)
+        print(msg_part.get_content_disposition)
         if 'text' in msg_part.get_content_type():
             msg_body += msg_part.get_content()   
 
@@ -71,7 +50,7 @@ def read_eml(file: BinaryIO) -> ProcessedEmail:
             file_obj = io.BytesIO(filedata)
             file_obj.name = msg_part.get_filename()
             attachments.append(file_obj)
-            
+    
     
     return ProcessedEmail(
             msg['from'],
@@ -79,5 +58,4 @@ def read_eml(file: BinaryIO) -> ProcessedEmail:
             attachments,
             None
     )
-
 
