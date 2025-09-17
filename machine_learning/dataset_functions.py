@@ -9,6 +9,7 @@ import pickle as pkl
 
 
 def get_keywords(pathname: str) -> dict:
+
     dataset = pd.read_csv(pathlib.Path(__file__).parent / 'datasets' / pathname)
     x, y = dataset['body'], dataset['label']
     
@@ -22,7 +23,6 @@ def get_keywords(pathname: str) -> dict:
     model.fit(x_vec, y)
 
     y_pred = model.predict(vectorizer.transform(x_test))
-    print(classification_report(y_test, y_pred))
 
     # interpret the model's coeffs
     feature_names = vectorizer.get_feature_names_out()
