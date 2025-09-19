@@ -10,6 +10,41 @@ from hashlib import sha256
 #VirusTotal API Key
 virusTotal_API_key = "7d7b6d2eb25c613fecc1b3a5bb5ccd1cdfeecc6312f390a6237c3f66036a4de3"
 
+def sender_domain_checker(email: ProcessedEmail):
+   
+    #clean_email = email_content.split()[0] #this takes the first world from the str (the real email, ignores any extra word) not sure if still needed
+    #print(f"Clean email (without any extra words): {clean_email}"), not sure if still needed
+
+    #blacklist
+    blacklist = open((r'C:\Users\Charm\inf1002\email_validation\blacklist.txt')).read().split(" ")
+
+    #whitelist
+    whitelist = open((r'C:\Users\Charm\inf1002\email_validation\whitelistf1.txt')).read().split(" ")
+
+    domain = email.sender.split("@")[1]
+    
+    print(f"Extracted domain: {domain}") #hdb.com <- "jeremy@hdb.com"
+
+    score = 0 
+
+    if domain in whitelist:
+        score += 5
+        print(f'{domain} is in the whitelist')
+    elif domain in blacklist:
+        score -= 5
+        print(f'{domain} is in the blacklist')
+    else:
+        print(f'{domain} is unknown')
+    
+    print(f'Risk score: {score}')
+    
+    return score
+
+
+
+def add(a: int, b: int) -> int:
+    return a+b
+
 def keyword_analysis(email: ProcessedEmail) -> int:
     keywords = COMPILED_DATASETS['keywords']
     message_words = [word.lower() for word in word_tokenize(email.message)]
