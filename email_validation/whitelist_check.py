@@ -24,17 +24,9 @@ def check_risk(email_content, whitelist, blacklist):
     print(f'Risk score: {score}')
     return score
     
-random_emails = [
-    'cane@safe-domain.com',
-    'cane@hbhd.com blacklist',
-    'hbhd.com@gmail.com'
-]
+
 
 blacklist = open((r'C:\Users\Charm\inf1002\email_validation\blacklist.txt')).read().split(" ")
-print(blacklist)
+
 
 whitelist = open((r'C:\Users\Charm\inf1002\email_validation\whitelistf1.txt')).read().split(" ")
-print(whitelist)
-
-for email in random_emails:
-    check_risk(email, whitelist, blacklist)
