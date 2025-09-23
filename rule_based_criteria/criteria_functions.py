@@ -1,5 +1,4 @@
-from machine_learning import COMPILED_DATASETS
-from nltk.tokenize import word_tokenize 
+from dataset_generation import COMPILED_DATASETS
 from data_parsing import ProcessedEmail
 from bs4 import BeautifulSoup
 from urllib.parse import urlparse
@@ -40,14 +39,9 @@ def sender_domain_checker(email: ProcessedEmail):
     
     return score
 
-
-
-def add(a: int, b: int) -> int:
-    return a+b
-
 def keyword_analysis(email: ProcessedEmail) -> int:
     keywords = COMPILED_DATASETS['keywords']
-    message_words = [word.lower() for word in word_tokenize(email.message)]
+    message_words = [word.lower() for word in email.message()]
     total_score = 0
     for word in message_words:
         if word in keywords:
@@ -110,7 +104,7 @@ def urL_ip_checker(text):
     link = urlparse(text)
     try:
         if ipaddress.ip_address(link.hostname):
-            print ('Suspicial url, the hostname are ipaddress.')
+            print ('Suspicious url, the hostname are ipaddress.')
     except ValueError:
         print('No IP address in the hostname, seems okay!')
 

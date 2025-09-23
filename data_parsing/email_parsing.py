@@ -14,7 +14,6 @@ class ProcessedEmail:
         self.is_phishing = None
 
 
-
     '''debugging method, flask gets angry at me because it can't serialise a Python class into json.'''
     def __dict__(self) -> dict:
         return {
