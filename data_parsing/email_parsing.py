@@ -41,7 +41,7 @@ def read_eml(file: BinaryIO) -> ProcessedEmail:
     for msg_part in msg_parts:
         print(msg_part.get_content_disposition)
         if 'text' in msg_part.get_content_type():
-            msg_body += msg_part.get_content()   
+            msg_body += msg_part.get_content()
 
         # handles attachments
         if msg_part.get_content_disposition() == "attachment":

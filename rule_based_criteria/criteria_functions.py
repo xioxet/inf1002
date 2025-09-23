@@ -15,10 +15,10 @@ def sender_domain_checker(email: ProcessedEmail):
     #print(f"Clean email (without any extra words): {clean_email}"), not sure if still needed
 
     #blacklist
-    blacklist = open((r'C:\Users\Charm\inf1002\email_validation\blacklist.txt')).read().split(" ")
+    blacklist = open((r'C:\Users\teck1\Documents\GitHub\inf1002\email_validation\blacklist.txt')).read().split(" ")
 
     #whitelist
-    whitelist = open((r'C:\Users\Charm\inf1002\email_validation\whitelistf1.txt')).read().split(" ")
+    whitelist = open((r'C:\Users\teck1\Documents\GitHub\inf1002\email_validation\whitelistf1.txt')).read().split(" ")
 
     domain = email.sender.split("@")[1]
     
@@ -38,7 +38,7 @@ def sender_domain_checker(email: ProcessedEmail):
     print(f'Risk score: {score}')
     
     return score
-
+'''
 def keyword_analysis(email: ProcessedEmail) -> int:
     keywords = COMPILED_DATASETS['keywords']
     message_words = [word.lower() for word in email.message()]
@@ -47,10 +47,10 @@ def keyword_analysis(email: ProcessedEmail) -> int:
         if word in keywords:
             total_score += keywords[word]
     return total_score
-
+'''
 ## Url Rule based
 
-def url_detection(text): #url detection
+def url_detection(message): #url detection
     # Multiple patterns to catch different URL formats
     url_patterns = [
         # 1) Schemed URLs (http/https/ftp) incl. auth, IPv4/IPv6, localhost, port, path
@@ -64,18 +64,16 @@ def url_detection(text): #url detection
     ]
 
     for pattern in url_patterns:
-        if re.findall(pattern, text):
-            url_link = re.findall(pattern,text)
-            print(url_link)
+        if re.findall(pattern, message):
+            url_link = re.findall(pattern, message)
             #all urls will be stored in list.
             return url_link
-    print('No Url Detected')
     return False
 
-def url_claimed_domain_checker(html_m):
-    #Parse HTML
-    soup = BeautifulSoup(html_m, "html.parser")
-    
+def url_claimed_domain_checker(message): 
+    #Parse HTML, provided if the content type is html
+    score = 0
+    soup = BeautifulSoup(message, "html.parser")
     #Loop through all <a> tags
     for link in soup.find_all("a"):
         text = link.get_text(strip=True)
@@ -84,41 +82,38 @@ def url_claimed_domain_checker(html_m):
             #Extract domain from href
             parsed_url = urlparse(href)
             actual_domain = parsed_url.netloc
-            if actual_domain.lower() in text.lower():
-                print("Domain matches claimed text")
-            else:
-                print("Domain may not match claimed text")
-        else:
-            print('No url Detected!')
+            if actual_domain.lower() not in text.lower():
+                #print("Domain matches claimed text")
+                score += 5 
+    return score
             
 def url_scheme_checker(url):
     link = urlparse(url)
+    score = 0
     #only allow https because unlikely for email user to face ftp,mailto, tel scheme
     allowed_schemes = {"https"} #can change to read from file
-    if link.scheme in allowed_schemes:
-        print (link.scheme)
-    else:
-        print('Suspicious scheme')
+    if link.scheme not in allowed_schemes:
+        score += 5
+    return score
 
 def urL_ip_checker(text):
     link = urlparse(text)
+    score = 0
     try:
         if ipaddress.ip_address(link.hostname):
-            print ('Suspicious url, the hostname are ipaddress.')
+            score += 5 #if there's ip address within the url
+            return score
     except ValueError:
-        print('No IP address in the hostname, seems okay!')
-
+        return score
+ 
 
 def virusTotal(email: ProcessedEmail):
-    #file_path = "./Attachments/attachment.pdf"
-    #files = {"file": (os.path.basename(file_path), open(os.path.abspath(file_path), "rb"))}
     dict = {}
     for attachment in email.attachments:
         file_bytes  = attachment.getvalue()
         file_name = getattr(attachment, "name", "myfile.bin")
         file_hash = sha256(file_bytes).hexdigest()
         files = {"file": (file_name, file_bytes)}
-        print(file_name)
         with virustotal_python.Virustotal(virusTotal_API_key) as vtotal:
             #will upload into the virustotal, if the file have never been uploaded before
             vtotal.request("files", files=files, method="POST")
@@ -129,4 +124,13 @@ def virusTotal(email: ProcessedEmail):
             dict[file_name] = attribute_totalvotes
     return dict
         
-
+def Url_Checker_Overall(email: ProcessedEmail):
+    status_url_detection = url_detection(email.message)
+    score = 0
+    if status_url_detection != False:
+        for i in status_url_detection:
+            score += urL_ip_checker(i)
+            score += url_scheme_checker(i)
+        score += url_claimed_domain_checker(email.message)
+    return score
+    
