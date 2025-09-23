@@ -8,10 +8,10 @@ class Report:
 
         self.criteria = [
             {
-            #    'name': 'keyword-analysis',
-            #    'function': criteria_functions.keyword_analysis,
-            #    }
-            #, {
+                'name': 'keyword-analysis',
+                'function': criteria_functions.keyword_analysis,
+                }
+            , {
                 'name': 'virusTotal',
                 'function': criteria_functions.virusTotal, 
             }, {

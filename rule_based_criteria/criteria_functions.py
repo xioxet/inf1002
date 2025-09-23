@@ -38,7 +38,7 @@ def sender_domain_checker(email: ProcessedEmail):
     print(f'Risk score: {score}')
     
     return score
-'''
+
 def keyword_analysis(email: ProcessedEmail) -> int:
     keywords = COMPILED_DATASETS['keywords']
     message_words = [word.lower() for word in email.message()]
@@ -47,7 +47,7 @@ def keyword_analysis(email: ProcessedEmail) -> int:
         if word in keywords:
             total_score += keywords[word]
     return total_score
-'''
+
 ## Url Rule based
 
 def url_detection(message): #url detection
