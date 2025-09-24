@@ -1,7 +1,6 @@
 
 # don't add the datasets to the git
-machine_learning/datasets/DATASET-*
-machine_learning/pickled-datasets/DATASET-*
+dataset_generation/pickled-datasets/*.pkl
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

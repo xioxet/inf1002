@@ -43,7 +43,7 @@ def initialize_datasets() -> dict:
 
 
     for data_dict in dataset_list:
-        filepath = pathlib.Path(__file__).parent / 'pickled-datasets' / data_dict['filename']
+        filepath = pathlib.Path(__file__).parent / 'pickled-datasets' / data_dict['filename'] + '.pkl'
         if filepath.is_file():
             with open(filepath, 'rb') as file:
                 compiled_datasets[data_dict['filename']] = pkl.load(file)
