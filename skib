@@ -1,0 +1,12 @@
+Traceback (most recent call last):
+  File "<frozen runpy>", line 189, in _run_module_as_main
+  File "<frozen runpy>", line 148, in _get_module_details
+  File "<frozen runpy>", line 112, in _get_module_details
+  File "/home/zen/uni/uni-projs/inf1002-pyproj/dataset_generation/__init__.py", line 3, in <module>
+    COMPILED_DATASETS = main.initialize_datasets()
+  File "/home/zen/uni/uni-projs/inf1002-pyproj/dataset_generation/main.py", line 53, in initialize_datasets
+    dataset = data_dict['function'](*args)
+  File "/home/zen/uni/uni-projs/inf1002-pyproj/dataset_generation/dataset_functions.py", line 63, in get_keywords
+    x, y = dataset['body'], dataset['is_phishing']
+           ~~~~~~~^^^^^^^^
+TypeError: list indices must be integers or slices, not str

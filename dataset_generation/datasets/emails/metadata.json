@@ -1,0 +1,31 @@
+[
+    {
+        "filename": "CEAS_08.csv",
+        "cols": {
+            "sender": "sender",
+            "body": "body",
+            "attachments": null,
+            "is_phishing": "label"
+        }
+    },
+
+    {
+        "filename": "Ling.csv",
+        "cols": {
+            "sender": null,
+            "body": "body",
+            "attachments": null,
+            "is_phishing": "label"
+        }
+    },
+
+    {
+        "filename": "SpamAssasin.csv",
+        "cols": {
+            "sender": null,
+            "body": "body",
+            "attachments": null,
+            "is_phishing": "label"
+        }
+    }
+]

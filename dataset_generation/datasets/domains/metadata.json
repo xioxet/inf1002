@@ -1,0 +1,10 @@
+[
+	{
+		"filename": "non-phishing-domains.txt",
+		"is_phishing": false
+	}, 
+	{
+		"filename": "phishing-domains.txt",
+		"is_phishing": true
+	}
+]

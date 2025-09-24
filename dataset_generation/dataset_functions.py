@@ -16,35 +16,57 @@ body (str)
 attachments (list)
 is_phishing (bool)
 
-functionally this is just going to be a dict of dicts that we can happy happy join together
+functionally this is just going to be a list of dicts that we can happy happy join together
 
 some lack the information that we're actually looking for
 but this is Ok because this is just for training purposes
 
 this is written with the future in mind: if we need more datasets, we just add it to this list!
 '''
-def normalize_email_datasets(email_csv_files: list) -> dict:
+def normalize_email_datasets(email_csv_files: list) -> list:
     
     datasets = []
     
     for f in email_csv_files:
         file = pathlib.Path(__file__).parent / 'datasets' / 'emails' / f['filename']
-        print(file)
+        # csv is easier to deal with
         dataset = pd.read_csv(pathlib.Path(__file__).parent / 'datasets' / 'emails' / f['filename'])
+        
+        new_df = pd.DataFrame(columns = f['cols'].keys())
         for col in f['cols']:
-            if f['cols'][col] is not None: 
-                dataset.rename(columns={f['cols'][col] : col})
+            original_col = f['cols'][col]
+            if not original_col:
+                new_df[col] = ""
+            elif col == 'is_phishing':
+                new_df[col] = dataset[original_col].astype(bool)
             else:
-                dataset[col] = ""
-        datasets.append(dataset)
-
-    return pd.concat(datasets).to_dict()
+                new_df[col] = dataset[original_col].astype(str)
 
 
-def get_keywords(dataset: dict) -> dict:
+        datasets.append(new_df)
 
-    x, y = dataset['body'], dataset['is_phishing']
-    
+    return pd.concat(datasets).to_dict(orient="records")
+
+
+def normalize_domain_datasets(domain_files: list) -> dict:
+
+    domain_dataset = {}
+
+    for f in domain_files:
+        file = pathlib.Path(__file__).parent / 'datasets' / 'domains' / f['filename']
+        dataset = open(file, encoding='utf-8').read().split('\n')
+        for domain in dataset:
+            domain_dataset[domain] = f['is_phishing']
+
+    return domain_dataset
+
+
+def get_keywords(dataset: list) -> dict:
+    cols = [(email['body'], email['is_phishing']) for email in dataset]
+    x, y = zip(*cols)
+    for i in x:
+        if type(i) != str:
+            print(i)
     x, x_test, y, y_test = train_test_split(
             x, y, test_size=0.2, random_state=10, stratify=y
     )

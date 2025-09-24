@@ -5,4 +5,3 @@ def word_tokenize(message -> str) -> List<str>:
         words.append(stripped_word)
     return words
 
-
