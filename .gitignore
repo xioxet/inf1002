@@ -1,6 +1,7 @@
 
 # don't add the datasets to the git
 dataset_generation/pickled-datasets/*.pkl
+dataset_generation/datasets/emails/*.csv
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

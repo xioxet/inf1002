@@ -5,7 +5,7 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import classification_report
 from sklearn.model_selection import train_test_split
 import numpy as np
-import pickle as pkl
+import pickle
 from . import dataset_functions
 import json
 
@@ -43,16 +43,18 @@ def initialize_datasets() -> dict:
 
 
     for data_dict in dataset_list:
-        filepath = pathlib.Path(__file__).parent / 'pickled-datasets' / data_dict['filename'] + '.pkl'
+        filepath = (pathlib.Path(__file__).parent / 'pickled-datasets' / data_dict['filename']).with_suffix('.pkl')
         if filepath.is_file():
-            with open(filepath, 'rb') as file:
-                compiled_datasets[data_dict['filename']] = pkl.load(file)
+            print(f'{data_dict["filename"]} already saved to disk. loading from disk...')
+            with open(filepath, 'rb') as pkl_file:
+                compiled_datasets[data_dict['filename']] = pickle.load(pkl_file)
         else:
             # lazy evaluation is necessary here
+            print(f'{data_dict["filename"]} not saved to disk. generating from scratch - this might take a while...')
             args = data_dict['args']()
             dataset = data_dict['function'](*args)
             with open(filepath, 'wb') as file: 
-                    pkl.dump(dataset, file)
+                    pickle.dump(dataset, file)
             compiled_datasets[data_dict['filename']] = dataset
 
     return compiled_datasets        

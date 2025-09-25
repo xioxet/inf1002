@@ -11,7 +11,7 @@ class ProcessedEmail:
         self.sender = sender
         self.message = message
         self.attachments = attachments
-        self.is_phishing = None
+        self.is_phishing = is_phishing
 
 
     '''debugging method, flask gets angry at me because it can't serialise a Python class into json.'''

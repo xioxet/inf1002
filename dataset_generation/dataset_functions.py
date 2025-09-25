@@ -1,11 +1,13 @@
-import pandas as pd
 import pathlib
+import csv, sys
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import classification_report
 from sklearn.model_selection import train_test_split
 import numpy as np
 import pickle as pkl
+
+from data_parsing import ProcessedEmail
 
 '''
 so unfortunately, bc we are gathering from different datasets
@@ -23,29 +25,31 @@ but this is Ok because this is just for training purposes
 
 this is written with the future in mind: if we need more datasets, we just add it to this list!
 '''
+
+csv.field_size_limit(sys.maxsize) # some of these columns are big.
+
 def normalize_email_datasets(email_csv_files: list) -> list:
-    
-    datasets = []
-    
+    emails = []
     for f in email_csv_files:
         file = pathlib.Path(__file__).parent / 'datasets' / 'emails' / f['filename']
-        # csv is easier to deal with
-        dataset = pd.read_csv(pathlib.Path(__file__).parent / 'datasets' / 'emails' / f['filename'])
-        
-        new_df = pd.DataFrame(columns = f['cols'].keys())
-        for col in f['cols']:
-            original_col = f['cols'][col]
-            if not original_col:
-                new_df[col] = ""
-            elif col == 'is_phishing':
-                new_df[col] = dataset[original_col].astype(bool)
-            else:
-                new_df[col] = dataset[original_col].astype(str)
-
-
-        datasets.append(new_df)
-
-    return pd.concat(datasets).to_dict(orient="records")
+        cols = f['cols']
+        with open(file, newline='') as csvfile:
+            rows = csv.DictReader(csvfile)
+            for row in rows:
+                # initialize null values + rename columns
+                for col in cols:
+                    if cols[col] is None:
+                        row[col] = None
+                    else:
+                        row[col] = row[cols[col]]
+                # i would love to just directly serialize the ProcessedEmail classes but we just cannot have nice things.
+                emails.append({
+                    'sender': row['sender'],
+                    'message': row['message'],
+                    'attachments': row['attachments'],
+                    'is_phishing': row['is_phishing']
+                })
+    return emails
 
 
 def normalize_domain_datasets(domain_files: list) -> dict:
@@ -62,18 +66,16 @@ def normalize_domain_datasets(domain_files: list) -> dict:
 
 
 def get_keywords(dataset: list) -> dict:
-    cols = [(email['body'], email['is_phishing']) for email in dataset]
+
+    cols = [(email['message'], email['is_phishing']) for email in dataset]
     x, y = zip(*cols)
-    for i in x:
-        if type(i) != str:
-            print(i)
     x, x_test, y, y_test = train_test_split(
             x, y, test_size=0.2, random_state=10, stratify=y
     )
     # the actual ML process
     vectorizer = TfidfVectorizer(stop_words='english', max_features=5000)
     x_vec = vectorizer.fit_transform(x)
-    model = LogisticRegression(max_iter=1000, n_jobs=-1)
+    model = LogisticRegression(max_iter=1000, n_jobs=1)
     model.fit(x_vec, y)
 
     y_pred = model.predict(vectorizer.transform(x_test))
@@ -88,3 +90,4 @@ def get_keywords(dataset: list) -> dict:
         wordlist_data[feature_names[i]] = model.coef_[0][i]
 
     return wordlist_data
+
