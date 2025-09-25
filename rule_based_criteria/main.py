@@ -10,16 +10,11 @@ class Report:
             {
                 'name': 'keyword-analysis',
                 'function': criteria_functions.keyword_analysis,
-                }
-            , {
-                'name': 'virusTotal',
-                'function': criteria_functions.virusTotal, 
-            }, {
-                'name': 'sender_domain_checker',
-                'function': criteria_functions.sender_domain_checker
-            }, {
-                'name': 'Url_Checker_Overall',
-                'function': criteria_functions.Url_Checker_Overall
+            },
+             
+            {
+                'name': 'url-detection',
+                'function': criteria_functions.check_urls
             }
         ]
 
