@@ -1,0 +1,45 @@
+class ProcessedEmail:
+    def __init__(self, sender: str, message: str, attachments: list, is_phishing: bool):
+        self.sender = sender
+        self.message = message
+        self.attachments = attachments
+        self.is_phishing = is_phishing
+
+
+    '''debugging method, flask gets angry at me because it can't serialise a Python class into json.'''
+    def __dict__(self) -> dict:
+        return {
+            'sender': self.sender,
+            'message': self.message,
+            'attachments': [file.name for file in self.attachments],
+            'is_phishing': None,
+        }
+    
+def domain_checker(email: ProcessedEmail) -> int:
+    
+    domains = {
+    'safe-domain.com': 0,
+    'phishing-site.xyz': 1,
+    'unknown.com': 0
+}
+    score = 0
+    domain = email.sender.split("@")[1]  # extract the domain
+
+    if domain in domains:
+        score += domains[domain]  # add/subtract based on dict value
+        print(f"{domain} found in dict, score adjusted by {domains[domain]}")
+    else:
+        print(f"{domain} unknown, score = 0")
+
+    return score
+
+#testing
+emails = [
+    ProcessedEmail("cane@safe-domain.com", "", [], False),
+    ProcessedEmail("alice@phishing-site.xyz", "", [], True),
+    ProcessedEmail("bob@unknown.com", "", [], False)
+]
+
+for e in emails:
+    s = domain_checker(e)
+    print(f"Risk score for {e.sender}: {s}\n")
