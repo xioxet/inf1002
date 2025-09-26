@@ -33,7 +33,7 @@ def normalize_email_datasets(email_csv_files: list) -> list:
     for f in email_csv_files:
         file = pathlib.Path(__file__).parent / 'datasets' / 'emails' / f['filename']
         cols = f['cols']
-        with open(file, newline='') as csvfile:
+        with open(file, newline='', encoding='utf-8', errors='ignore') as csvfile:
             rows = csv.DictReader(csvfile)
             for row in rows:
                 # initialize null values + rename columns
@@ -58,7 +58,7 @@ def normalize_domain_datasets(domain_files: list) -> dict:
 
     for f in domain_files:
         file = pathlib.Path(__file__).parent / 'datasets' / 'domains' / f['filename']
-        dataset = open(file, encoding='utf-8').read().split('\n')
+        dataset = open(file, encoding='utf-8', errors='ignore').read().split('\n')
         for domain in dataset:
             domain_dataset[domain] = f['is_phishing']
 
