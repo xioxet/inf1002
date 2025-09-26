@@ -31,7 +31,6 @@ def get_all_urls(message: str) -> list: #url detection
     for pattern in url_patterns:
         for url in re.findall(pattern, message):
             urls_found.append(url)
-
     return urls_found
 
 def url_claimed_domain_checker(message: str) -> int: 

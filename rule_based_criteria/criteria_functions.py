@@ -9,7 +9,7 @@ from base64 import urlsafe_b64encode
 from .utils import *
 
 #VirusTotal API Key
-virusTotal_API_key = ""
+virusTotal_API_key = "7d7b6d2eb25c613fecc1b3a5bb5ccd1cdfeecc6312f390a6237c3f66036a4de3"
 
 def sender_domain_checker(email: ProcessedEmail) -> int:
    
@@ -50,7 +50,7 @@ def keyword_analysis(email: ProcessedEmail) -> int:
             total_score += keywords[word]
     return total_score
 
-def scan_attachment(email: ProcessedEmail):
+def scan_attachment_url(email: ProcessedEmail):
     dict = {}
     url_obj = get_all_urls(email.message)
     if email.attachments:
