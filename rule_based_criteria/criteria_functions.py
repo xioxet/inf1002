@@ -7,6 +7,7 @@ from hashlib import sha256
 from base64 import urlsafe_b64encode
 
 from .utils import *
+from utils import *
 
 #VirusTotal API Key
 virusTotal_API_key = "7d7b6d2eb25c613fecc1b3a5bb5ccd1cdfeecc6312f390a6237c3f66036a4de3"
@@ -42,7 +43,7 @@ def sender_domain_checker(email: ProcessedEmail) -> int:
     return score
 
 def keyword_analysis(email: ProcessedEmail) -> int:
-    keywords = COMPILED_DATASETS['keywords']
+    keywords = deserialize(COMPILED_DATASETS['keywords']) # deserialization is cached
     message_words = [word.lower() for word in word_tokenize(email.message)]
     total_score = 0
     for word in message_words:

@@ -2,10 +2,10 @@ import pytest
 import pathlib
 import hashlib
 from data_parsing import read_eml
-
+from utils import *
 
 def test_read_eml():
-    filepath = pathlib.Path(__file__).parent / "testfiles" / "test_email.eml"
+    filepath = current_filepath(__file__) / "testfiles" / "test_email.eml"
     eml_file = open(filepath, 'rb')
     parsed_eml = read_eml(eml_file)
 

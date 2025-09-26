@@ -6,7 +6,7 @@ from os import urandom
 import sqlite3
 
 from data_parsing import read_eml, email_parsing
-from rule_based_criteria import Report
+from rule_based_criteria import Report, get_average_scores_of_dataset
 from .forms import *
 import io
 
@@ -14,6 +14,7 @@ import io
 flask_app = Flask(__name__)
 flask_app.secret_key = urandom(64)
 
+get_average_scores_of_dataset()
 
 @flask_app.route('/')
 def home():

@@ -9,14 +9,15 @@ import pickle
 from . import dataset_functions
 import json
 import copy
+from utils import *
 
 '''handles serialization to disk'''
 def initialize_datasets() -> dict:
     
-    with open(pathlib.Path(__file__).parent / 'datasets' / 'emails' / 'metadata.json') as f:
+    with open(current_filepath(__file__) / 'datasets' / 'emails' / 'metadata.json') as f:
         email_csv_files = json.load(f)
 
-    with open(pathlib.Path(__file__).parent / 'datasets' / 'domains' / 'metadata.json') as f:
+    with open(current_filepath(__file__) / 'datasets' / 'domains' / 'metadata.json') as f:
         domain_files = json.load(f)
 
     compiled_datasets = {}
@@ -44,7 +45,7 @@ def initialize_datasets() -> dict:
 
 
     for data_dict in dataset_list:
-        filepath = (pathlib.Path(__file__).parent / 'pickled-datasets' / data_dict['filename']).with_suffix('.pkl')
+        filepath = (current_filepath(__file__) / 'pickled-datasets' / data_dict['filename']).with_suffix('.pkl')
         if filepath.is_file():
             print(f'{data_dict["filename"]} already saved to disk!')
         else:
@@ -55,9 +56,6 @@ def initialize_datasets() -> dict:
             with open(filepath, 'wb') as file: 
                     pickle.dump(dataset, file)
 
-        # lambda scoping is really weird :/
-        fp = copy.copy(filepath)
-        compiled_datasets[data_dict['filename']] = lambda: pickle.load(open(fp, 'rb'))
+        compiled_datasets[data_dict['filename']] = filepath 
 
-    return compiled_datasets       
-
+    return compiled_datasets
