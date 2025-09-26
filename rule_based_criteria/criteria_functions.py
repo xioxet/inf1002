@@ -42,6 +42,13 @@ def sender_domain_checker(email: ProcessedEmail) -> int:
     
     return score
 
+def domain_checker(email: ProcessedEmail) -> int:
+    domains = deserialize(COMPILED_DATASETS['domains'])
+    score = 0
+    # add score here ....
+    return score
+
+
 def keyword_analysis(email: ProcessedEmail) -> int:
     keywords = deserialize(COMPILED_DATASETS['keywords']) # deserialization is cached
     message_words = [word.lower() for word in word_tokenize(email.message)]
