@@ -65,9 +65,9 @@ def normalize_domain_datasets(domain_files: list) -> dict:
     return domain_dataset
 
 
-def get_keywords(dataset: list) -> dict:
+def get_keywords(dataset) -> dict:
 
-    cols = [(email['message'], email['is_phishing']) for email in dataset]
+    cols = [(email['message'], email['is_phishing']) for email in dataset()]
     x, y = zip(*cols)
     x, x_test, y, y_test = train_test_split(
             x, y, test_size=0.2, random_state=10, stratify=y

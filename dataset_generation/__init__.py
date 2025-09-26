@@ -1,6 +1,7 @@
 from . import main
 
-COMPILED_DATASETS = main.initialize_datasets() 
+COMPILED_DATASETS = main.initialize_datasets()
+# this returns _func handlers_ to the necessary datasets
 
 #load CSV file into DataFrame
 #df = pd.read_csv('CEAS_08.csv')
