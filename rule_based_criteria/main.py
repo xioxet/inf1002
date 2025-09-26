@@ -31,17 +31,23 @@ class Report:
 
 def get_average_scores_of_dataset():
     emails = deserialize(COMPILED_DATASETS['emails'])
-    ham_avg = {}
-    spam_avg = {}
-    z = [ham_avg, spam_avg]
-    for key in emails[0]:
-        ham_avg[key] = []
-        spam_avg[key] = []
-
+    average_dict = {}
+    for criterium in Report(None).criteria:
+        average_dict[criterium['name']] = []
+    
+    averages = [{k: [] for k in average_dict} for i in range(2)]
+    
     print('now processing all emails to generate averages. this may take a while!')
     for email in tqdm(emails):
         email = type('ProcessedEmail', (object,), email) # python magic
         score_classification = Report(email).classify()
         
+        for key, value in score_classification.items():
+            averages[email.is_phishing][key] += [value]
+
+    for avg in averages:
+        for key in avg:
+            avg[key] = sum(avg[key]) / len(avg[key])
+        print(avg)
 
 
