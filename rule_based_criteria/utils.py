@@ -18,7 +18,6 @@ def get_all_urls(message: str) -> list: #url detection
     # Multiple patterns to catch different URL formats
     url_patterns = r'(?:https?://\S+|www\.\S+|\S+\.com\S*)'
 
-
     urls_found = []
     for url in re.findall(url_patterns, message):
         urls_found.append(url)
