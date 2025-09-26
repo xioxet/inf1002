@@ -44,7 +44,7 @@ def url_scheme_checker(url: str) -> int:
     link = urlparse(url)
     score = 0
     #only allow https because unlikely for email user to face ftp,mailto, tel scheme
-    allowed_schemes = {"https"} #can change to read from file
+    allowed_schemes = {"http"} #can change to read from file
     if link.scheme not in allowed_schemes:
         score += 5
     return score
