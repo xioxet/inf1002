@@ -2,6 +2,7 @@
 import re, ipaddress, virustotal_python, os
 from bs4 import BeautifulSoup
 from urllib.parse import urlparse
+import validators
 
 '''tokenizes messages'''
 def word_tokenize(message: str) -> list:
@@ -15,22 +16,12 @@ def word_tokenize(message: str) -> list:
 '''returns urls found in message'''
 def get_all_urls(message: str) -> list: #url detection
     # Multiple patterns to catch different URL formats
-    url_patterns = [
-        # 1) Schemed URLs (http/https/ftp) incl. auth, IPv4/IPv6, localhost, port, path
-        r'(?:https?|ftp)://(?:[^\s:@/]+(?::[^\s:@/]*)?@)?(?:(?:[a-z0-9-]+\.)+(?:[a-z]{2,63}|xn--[a-z0-9-]+)|localhost|\d{1,3}(?:\.\d{1,3}){3}|\[(?:[0-9a-f:.]+)\])(?::\d{2,5})?(?:/[^\s<>()\[\]{}"\']*)?',
-        # 2) www.* without scheme
-        r'www\.(?:[a-z0-9-]+\.)+(?:[a-z]{2,63}|xn--[a-z0-9-]+)(?::\d{2,5})?(?:/[^\s<>()\[\]{}"\']*)?',
-        # 3) bare domain (no scheme/www), optional port+path; avoid emails & scheme/www overlaps
-        r'(?<!@)(?<!://)(?<!www\.)(?:[a-z0-9-]+\.)+(?:[a-z]{2,63}|xn--[a-z0-9-]+)(?::\d{2,5})?(?:/[^\s<>()\[\]{}"\']*)?',
-        # 4) scheme without // (e.g., https:example.com)
-        r'(?:https?|ftp):(?!//)[^\s<>()\[\]{}"\']+'
-    ]
-    
+    url_patterns = r'(?:https?://\S+|www\.\S+|\S+\.com\S*)'
+
 
     urls_found = []
-    for pattern in url_patterns:
-        for url in re.findall(pattern, message):
-            urls_found.append(url)
+    for url in re.findall(url_patterns, message):
+        urls_found.append(url)
     return urls_found
 
 def url_claimed_domain_checker(message: str) -> int: 

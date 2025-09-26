@@ -51,6 +51,7 @@ def keyword_analysis(email: ProcessedEmail) -> int:
             total_score += keywords[word]
     return total_score
 
+
 def scan_attachment_url(email: ProcessedEmail):
     dict = {}
     url_obj = get_all_urls(email.message)
