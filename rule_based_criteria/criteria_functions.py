@@ -88,7 +88,6 @@ def check_urls(email: ProcessedEmail) -> int:
     score = 0
     for url in all_urls:
         score += urL_ip_checker(url)
-        score += url_scheme_checker(url)
     score += url_claimed_domain_checker(email.message)
     return score
     

@@ -40,15 +40,6 @@ def url_claimed_domain_checker(message: str) -> int:
                 score += 5 
     return score
 
-def url_scheme_checker(url: str) -> int:
-    link = urlparse(url)
-    score = 0
-    #only allow https because unlikely for email user to face ftp,mailto, tel scheme
-    allowed_schemes = {"http"} #can change to read from file
-    if link.scheme not in allowed_schemes:
-        score += 5
-    return score
-
 def urL_ip_checker(url: str) -> int:
     pattern = r'(\d{1,3}.){3}\d{1,3}' # simple regex to match urls
     if re.match(pattern, url):
