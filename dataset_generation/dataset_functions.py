@@ -48,7 +48,7 @@ def normalize_email_datasets(email_csv_files: list) -> list:
                     'sender': row['sender'],
                     'message': row['message'],
                     'attachments': row['attachments'],
-                    'is_phishing': row['is_phishing']
+                    'is_phishing': int(row['is_phishing'])
                 })
     return emails
 

@@ -11,10 +11,20 @@ from .forms import *
 import io
 
 
+
 flask_app = Flask(__name__)
 flask_app.secret_key = urandom(64)
 
+import cProfile
+import pstats
+profiler = cProfile.Profile()
+profiler.enable()
 get_average_scores_of_dataset()
+profiler.disable()
+
+stats = pstats.Stats(profiler).sort_stats("cumulative")
+stats.print_stats(20)
+
 
 @flask_app.route('/')
 def home():
