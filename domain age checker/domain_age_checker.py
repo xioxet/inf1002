@@ -24,10 +24,10 @@ def check_domain_age(domain:str):
         #scoring
         if age_days < 180:  # less than 6 months old
             print("Domain is less than 6 months old.Higher risk.")
-            score=-5
+            score += 5
         else:
             print("Domain is more than 6 months old. Lower risk.")
-            score=5
+            score -= 5
         
         return age_days, score
 

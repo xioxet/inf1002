@@ -13,10 +13,10 @@ def check_risk(email_content, whitelist, blacklist):
     score = 0 
 
     if domain in whitelist:
-        score += 5
+        score -= 5
         print(f'{domain} is in the whitelist')
     elif domain in blacklist:
-        score -= 5
+        score += 5
         print(f'{domain} is in the blacklist')
     else:
         print(f'{domain} is unknown')
