@@ -16,10 +16,11 @@ def word_tokenize(message: str) -> list:
 '''returns urls found in message'''
 def get_all_urls(message: str) -> list: #url detection
     # Multiple patterns to catch different URL formats
-    url_patterns = r'(?:https?://\S+|www\.\S+|\S+\.com\S*)'
+    url_patterns = r'(?:https?://[^\s@]+|www\.[^\s@]+\.com)'
 
     urls_found = []
     for url in re.findall(url_patterns, message):
+        print(url)
         urls_found.append(url)
     return urls_found
 
