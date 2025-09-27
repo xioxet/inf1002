@@ -17,12 +17,10 @@ def word_tokenize(message: str) -> list:
 def get_all_urls(message: str) -> list: #url detection
     # Multiple patterns to catch different URL formats
     url_patterns = r'(?:https?://[^\s@]+|www\.[^\s@]+\.com)'
-
-    urls_found = []
+    urls_found = set() # no duplicates...
     for url in re.findall(url_patterns, message):
-        print(url)
-        urls_found.append(url)
-    return urls_found
+        urls_found.add(url)
+    return list(urls_found)
 
 def url_claimed_domain_checker(message: str) -> int: 
     #Parse HTML, provided if the content type is html
@@ -41,8 +39,8 @@ def url_claimed_domain_checker(message: str) -> int:
                 score += 5 
     return score
 
-def urL_ip_checker(url: str) -> int:
-    pattern = r'(\d{1,3}.){3}\d{1,3}' # simple regex to match urls
+def url_ip_checker(url: str) -> int:
+    pattern = r'(\d{1,3}.){3}\d{1,3}' # simple regex to match IPs
     if re.match(pattern, url):
         return 5
     return 0

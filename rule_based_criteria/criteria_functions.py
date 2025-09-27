@@ -94,7 +94,11 @@ def check_urls(email: ProcessedEmail) -> int:
     all_urls = get_all_urls(email.message)
     score = 0
     for url in all_urls:
-        score += urL_ip_checker(url)
+        score += url_ip_checker(url)
     score += url_claimed_domain_checker(email.message)
+    #if email.is_phishing:
+    #    if len(all_urls) > 0:
+    #        if 'cnn' not in all_urls[0]:
+    #            print(len(all_urls), all_urls[:5])
     return score
     
